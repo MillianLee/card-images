@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>抽牌卡工具</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      display: flex;
+      justify-content: center; /* 水平居中 */
+      align-items: center; /* 垂直居中 */
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    img {
+      max-width: 100%; /* 限制图片宽度为视窗宽度 */
+      max-height: 100%; /* 限制图片高度为视窗高度 */
+      object-fit: contain; /* 确保图片保持比例缩放 */
+    }
+
+    /* 重新抽牌按钮样式 */
+    #reset-button {
+      position: fixed;
+      bottom: 20px; /* 距离屏幕底部 20px */
+      left: 50%; /* 水平居中 */
+      transform: translateX(-50%);
+      background-color: #00c4cc;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      display: none;
+      z-index: 3;
+    }
+  </style>
+</head>
+<body>
+  <!-- 背面图 -->
+  <img id="card-back" src="https://raw.githubusercontent.com/MillianLee/card-images/main/mayacards.png" alt="Card Back" onclick="flipCard()">
+  <!-- 正面图 -->
+  <img id="card-content" alt="Card Front" style="display:none;" onclick="flipCard()" onerror="alert('图片加载失败，请检查链接！')">
+  <!-- 重新抽牌按钮 -->
+  <button id="reset-button" onclick="resetCard()">重新抽牌</button>
+
+  <script>
+    // 卡片图片基础路径和总数
+    const baseUrl = 'https://raw.githubusercontent.com/MillianLee/card-images/main/';
+    const cardCount = 39; // 卡片总数
+
+    let cardFlipped = false; // 状态变量：是否已抽牌
+
+    function getRandomCardUrl() {
+      const randomIndex = Math.floor(Math.random() * cardCount) + 1; // 随机数 1-39
+      return `${baseUrl}mayacard${String(randomIndex).padStart(3, '0')}.jpg`; // 生成文件名
+    }
+
+    function flipCard() {
+      if (cardFlipped) return; // 如果已抽牌，直接返回
+
+      console.log('Card flipped'); // 调试信息
+
+      // 隐藏背面图
+      const cardBack = document.getElementById('card-back');
+      cardBack.style.display = 'none';
+
+      // 显示正面图
+      const cardContent = document.getElementById('card-content');
+      cardContent.src = getRandomCardUrl(); // 设置随机正面图片 URL
+      cardContent.style.display = 'block';
+
+      // 更新状态为“已抽牌”
+      cardFlipped = true;
+
+      // 显示重新抽牌按钮
+      const resetButton = document.getElementById('reset-button');
+      resetButton.style.display = 'block';
+    }
+
+    function resetCard() {
+      console.log('Reset card'); // 调试信息
+
+      // 重置状态
+      cardFlipped = false;
+
+      // 恢复背面图
+      const cardBack = document.getElementById('card-back');
+      cardBack.style.display = 'block';
+
+      // 隐藏正面图
+      const cardContent = document.getElementById('card-content');
+      cardContent.style.display = 'none';
+
+      // 隐藏重新抽牌按钮
+      const resetButton = document.getElementById('reset-button');
+      resetButton.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
